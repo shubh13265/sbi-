@@ -1,0 +1,98 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const FraudDetection = () => {
+  const [claimAmount, setClaimAmount] = useState("");
+  const [history, setHistory] = useState("");
+  const [aiResult, setAiResult] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = useState(false);
+
+  
+  const analyzeClaim = () => {
+    const claimValue = parseFloat(claimAmount);
+    const fraudProbability = Math.random(); 
+    const accuracy = Math.random() * 100; 
+    
+    if (accuracy < 70) {
+      setAiResult({ fraud: true, accuracy });
+      setShowForm(true);
+    } else {
+      setAiResult({ fraud: fraudProbability > 0.5, accuracy });
+      setShowForm(false);
+    }
+  };
+
+  const submitReport = () => {
+    setReportSubmitted(true);
+  };
+
+  return (
+    <div className="relative flex flex-col items-center p-6 min-h-screen">
+      {/* Video Background */}
+      <video className="absolute top-0 left-0 w-full h-full object-cover" autoPlay loop muted playsInline>
+        <source src="/ai-background.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      <Card className="w-full max-w-md p-4 bg-white bg-opacity-90 rounded-lg shadow-lg relative z-10">
+        <CardContent>
+          {!reportSubmitted ? (
+            <>
+              <h2 className="text-xl font-semibold mb-4">Insurance Fraud Detection</h2>
+              <div className="mb-3">
+                <Label>Claim Amount ($)</Label>
+                <Input type="number" value={claimAmount} onChange={(e) => setClaimAmount(e.target.value)} />
+              </div>
+              <div className="mb-3">
+                <Label>Claim History</Label>
+                <Input type="text" value={history} onChange={(e) => setHistory(e.target.value)} />
+              </div>
+              <Button onClick={analyzeClaim}>Analyze Claim</Button>
+              {aiResult && (
+                <div className="mt-4 p-3 border rounded bg-gray-50">
+                  <p>AI Accuracy: {aiResult.accuracy.toFixed(2)}%</p>
+                  <p>Fraud Detected: {aiResult.fraud ? "Yes" : "No"}</p>
+                  {aiResult.fraud && aiResult.accuracy < 70 && (
+                    <div className="mt-2 text-red-500">
+                      <p>Fraud suspected! Please fill out this form:</p>
+                      <Button onClick={() => setShowForm(true)} className="text-blue-600 underline">Report Fraud</Button>
+                    </div>
+                  )}
+                </div>
+              )}
+              {showForm && (
+                <div className="mt-4 p-4 border rounded bg-gray-100">
+                  <h3 className="text-lg font-semibold mb-2">Fraud Report Form</h3>
+                  <div className="mb-2">
+                    <Label>Full Name</Label>
+                    <Input type="text" />
+                  </div>
+                  <div className="mb-2">
+                    <Label>Contact Email</Label>
+                    <Input type="email" />
+                  </div>
+                  <div className="mb-2">
+                    <Label>Details of Suspicious Activity</Label>
+                    <Input type="text" />
+                  </div>
+                  <Button className="mt-2" onClick={submitReport}>Submit Report</Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold mb-4">Report Submitted</h2>
+              <p className="text-gray-700">Thank you for reporting. Our team will review the information and take appropriate action.</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default FraudDetection;
