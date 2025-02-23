@@ -1,1 +1,1 @@
-# sbi-
+This project addresses insurance fraud, a major issue causing financial losses. By using AI, it detects suspicious claims based on probability and accuracy. If accuracy is below 70%, fraud is suspected, prompting users to submit a report. This automation reduces manual fraud detection efforts, speeds up claim processing, and enhances transparency
